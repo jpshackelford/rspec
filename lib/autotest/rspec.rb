@@ -8,7 +8,13 @@ Autotest.add_hook :initialize do |at|
     filename 
   }
   at.add_mapping(%r%^lib/(.*)\.rb$%) { |_, m| 
-    ["spec/#{m[1]}_spec.rb"]
+    # two match entries to handle differences
+    # in directory structure:
+    # e.g lib/file.rb         => spec/file_spec.rb  - or  -
+    #     lib/module/file.rb  => spec/file_spec.rb
+    path1 = m[1]
+    path2 = m[1].split('/')[1..-1].join('/')
+    ["spec/#{path1}_spec.rb", "spec/#{path2}_spec.rb"]
   }
   at.add_mapping(%r%^spec/(spec_helper|shared/.*)\.rb$%) { 
     at.files_matching %r%^spec/.*_spec\.rb$%

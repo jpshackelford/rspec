@@ -82,14 +82,16 @@ HERE
     describe "mappings" do
     
       before(:each) do
-        @lib_file = "lib/something.rb"
+        @lib_files = ["lib/something.rb", "lib/module/something.rb"]
         @spec_file = "spec/something_spec.rb"
         @rspec_autotest = Rspec.new
         @rspec_autotest.hook :initialize
       end
     
       it "should find the spec file for a given lib file" do
-        @rspec_autotest.should map_specs([@spec_file]).to(@lib_file)
+        @lib_files.each do |lib_file|
+          @rspec_autotest.should map_specs([@spec_file]).to(lib_file)
+        end
       end
     
       it "should find the spec file if given a spec file" do
