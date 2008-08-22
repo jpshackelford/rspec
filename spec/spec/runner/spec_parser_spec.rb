@@ -82,4 +82,13 @@ describe "SpecParser" do
     parser.spec_name_for(file, 63).should == "e f 11"
   end
 
+  it "should handle paths which contain colons" do
+    fixture =
+       { "c:/somepath/somefile.rb:999:in 'method'" => "c:/somepath/somefile.rb",
+         "./somepath/somefile:999"                 => "./somepath/somefile" }
+    fixture.each_pair do |input, expected|
+      parser.send(:parse_backtrace, input ).should == [[expected, 999]]
+    end
+  end
+
 end

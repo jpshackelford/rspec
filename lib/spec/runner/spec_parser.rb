@@ -62,10 +62,14 @@ module Spec
 
       def parse_backtrace(backtrace)
         backtrace.collect do |trace_line|
-          split_line = trace_line.split(':')
-          [split_line[0], Integer(split_line[1])]
+          # match c:/somepath/file.rb:999:in 'method'
+          # -or-  ./somepath.file.rb:999
+          trace_line =~ /(.*)\:(\d*)(\:|$)/
+          file, number = $1, $2
+          [file, Integer(number)]
         end
       end
+
     end
   end
 end
